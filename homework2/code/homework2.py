@@ -90,9 +90,50 @@ df_all.style.to_latex('comp_of_means.tex')
 headers = ["Variable", "Treatment Sample Mean", "Control Sample Mean", "P-value, difference-in-means"]
 
 print(tabulate(df_all, headers, tablefmt="grid"))
+print(tabulate(df_all, headers, tablefmt="latex_longtable"))
+
 
 
 #KDE plot
 sns.kdeplot(data=data, x='electricity', hue='retrofit', bw_adjust=.5)
+
+#OLS from scratch
+truexvars = np.array([data.sqft, data.retrofit, data.temp, np.ones(1000)])
+truexvars = truexvars.transpose()
+trueyvar = np.array(data.electricity)
+
+betahat = np.dot(np.linalg.inv(np.dot(truexvars.T, truexvars)),np.dot(truexvars.T, trueyvar))
+
+print(betahat)
+
+
+#simulated OLS
+beta = [1, .1, .5, .4]
+
+def f(beta):
+    return np.sum((trueyvar - np.dot(truexvars, beta))**2)
+
+res = scipy.optimize.minimize(f, beta)
+print(res)
+
+
+#canned OLS
+results = sm.formula.ols('electricity ~ sqft + retrofit + temp', data=data).fit()
+print(results.summary())
+
+#creating table
+
+
+rownames2 = pd.concat([pd.Series(['sqft','retrofit','temp','Intercept'])])
+colnames2 = pd.concat([pd.Series(['By hand', 'Simulation', 'Canned'])])
+
+df_betahat = pd.DataFrame(betahat)
+df_betahat.index = rownames2
+df_res = pd.DataFrame(res.x)
+df_res.index = rownames2
+df_results = pd.DataFrame(results.params)
+
+df_betahat.reindex_like(df_results)
+df_res.reindex_like(df_results)
 
 
