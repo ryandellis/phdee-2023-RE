@@ -142,6 +142,6 @@ df_res = df_res.sort_index()
 df_3b = pd.concat([df_betahat, df_res, df_results], axis = 1)
 df_3b.columns = colnames2
 
-print(tabulate(df_3b, tablefmt='latex_longtable'))
+print(tabulate(df_3b, headers = colnames2, tablefmt='latex_longtable'))
 
 df_3b.style.to_latex('OLS_methods.tex')
