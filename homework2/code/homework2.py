@@ -136,4 +136,12 @@ df_results = pd.DataFrame(results.params)
 df_betahat.reindex_like(df_results)
 df_res.reindex_like(df_results)
 
+df_betahat = df_betahat.sort_index()
+df_res = df_res.sort_index()
 
+df_3b = pd.concat([df_betahat, df_res, df_results], axis = 1)
+df_3b.columns = colnames2
+
+print(tabulate(df_3b, tablefmt='latex_longtable'))
+
+df_3b.style.to_latex('OLS_methods.tex')
