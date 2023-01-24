@@ -15,6 +15,7 @@ import matplotlib.pyplot as pp
 import math
 import seaborn as sns
 import statsmodels.api as sm
+from tabulate import tabulate
 
 
 
@@ -32,25 +33,20 @@ test_sqft = stats.ttest_ind(treated.sqft, control.sqft).pvalue
 test_retro = stats.ttest_ind(treated.retrofit, control.retrofit).pvalue
 test_temp = stats.ttest_ind(treated.temp, control.temp).pvalue
 
-test_elec_t = stats.ttest_ind(treated.electricity, control.electricity,).statistic
-test_sqft_t = stats.ttest_ind(treated.sqft, control.sqft).statistic
-test_retro_t = stats.ttest_ind(treated.retrofit, control.retrofit).statistic
-test_temp_t = stats.ttest_ind(treated.temp, control.temp).statistic
-
 tests = np.around([test_elec, test_sqft, test_retro, test_temp], decimals=3)
 tests = pd.DataFrame(tests)
 
-stats = np.around([test_elec_t, test_sqft_t, test_retro_t, test_temp_t], decimals = 2)
-stats = pd.DataFrame(stats)
+zero = [' ',' ',' ',' ']
+zero = pd.DataFrame(zero)
 
 d1_mean = treated.mean()
 d1_std = treated.std()
 d0_mean = control.mean()
 d0_std = control.std()
 
-d1_mean = d1_mean.map('({:.2f})'.format)
+d1_mean = d1_mean.map('{:.2f}'.format)
 d1_std = d1_std.map('({:.2f})'.format)
-d0_mean = d0_mean.map('({:.2f})'.format)
+d0_mean = d0_mean.map('{:.2f}'.format)
 d0_std = d0_std.map('({:.2f})'.format)
 
 #using tabulate
@@ -74,7 +70,7 @@ col0.index = rownames
 col1 = pd.concat([d0_mean,d0_std],axis=1).stack()
 col1.index = rownames
 
-col2 = pd.concat([tests, stats],axis=1).stack()
+col2 = pd.concat([tests, zero],axis=1).stack()
 col2.index = rownames
 
 
@@ -91,6 +87,12 @@ os.chdir("C:\\Users\\rellis\\Dropbox (GaTech)\\PHD_AND_COURSES\\SPRING 2023\\ENV
 
 df_all.style.to_latex('comp_of_means.tex')
 
+headers = ["Variable", "Treatment Sample Mean", "Control Sample Mean", "P-value, difference-in-means"]
 
+print(tabulate(df_all, headers, tablefmt="grid"))
+
+
+#KDE plot
+sns.kdeplot(data=data, x='electricity', hue='retrofit', bw_adjust=.5)
 
 
