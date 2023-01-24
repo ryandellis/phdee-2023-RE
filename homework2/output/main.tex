@@ -50,13 +50,35 @@ colorlinks=true,
 \end{longtable}
 
 
+It appears randomization worked here. The home locations (proxied by "Temperature") and sizes ("Square Footage") are similar across treatment and control. The difference in mean outcome, if indeed we have complete random assignment, is the Average Treatment Effect.
+
 \subsection{Kernel Density Plot}
 
 \begin{figure}[ht]
     \centering
     \includegraphics[scale = 0.7]{kdeplot.png}
     \caption{Treated households shown in orange}
-
 \end{figure}
+
+\vspace{5cm}
+
+
+\subsection{OLS Methods}
+
+\begin{longtable}{lrrr}
+\hline
+           &     By hand &   Simulation &      Canned \\
+\hline
+\endhead
+ Intercept &  -83.6028   &   -83.611    &  -83.6028   \\
+ retrofit  & -109.666    &  -109.666    & -109.666    \\
+ sqft      &    0.615339 &     0.615339 &    0.615339 \\
+ temp      &    3.25508  &     3.25518  &    3.25508  \\
+\hline
+\end{longtable}
+
+
+\section{Stata}
+
 
 \end{document}
