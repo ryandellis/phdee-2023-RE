@@ -1,0 +1,65 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage[letterpaper, portrait, margin=1in]{geometry}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{graphicx}
+
+\usepackage{hyperref}
+\hypersetup{
+colorlinks=true,
+    linkcolor=black,
+    filecolor=black,      
+    urlcolor=blue,
+    citecolor=black,
+}
+\usepackage{natbib}
+
+\usepackage{titlesec}
+  
+\title{Homework 3}
+\author{Ryan Ellis}
+\date{Spring semester 2023}
+  
+\begin{document}
+  
+\maketitle
+
+\section{Stata or Python}
+
+\subsection{Logarithmic transformation}
+The following steps prove the equality by the properties of logarithms:
+\begin{align}
+    ln{(y_i)} = \alpha + ln{(\delta_i)} d_i + \gamma ln{(z_i)} + \eta_i
+\end{align}
+
+\begin{align}
+    y_i &= e^\alpha \delta^{d_i} z^\gamma_i e^{\eta_i}
+\end{align}
+
+\begin{align}
+    ln{(y_i)} = ln{(e^\alpha \delta^{d_i} z^\gamma_i e^{\eta_i})}
+\end{align}
+
+\begin{align}
+    = ln{(e^\alpha)} + ln{(\delta^{d_i})} + ln{(z^\gamma_i)} + ln{(e^{\eta_i})}
+\end{align}
+
+\begin{align}
+    = \alpha + ln{(\delta^{d_i})} + ln{(z^\gamma_i)} + \eta_i
+\end{align}
+
+\begin{align}
+    = \alpha + ln{(\delta)}d_i + \gamma ln{(z_i)} + \eta_i
+\end{align}
+
+\subsection{Parameter of interest}
+
+The parameter $\delta$ is easiest to interpret when all the terms of $y_i$ have been log-transformed. In equation (6) above, $\delta$ represents the efficacy of the retrofit program. More precisely, $\delta$ is the percent-change in $y_i$ for a $1\%$ change in 
+
+
+
+
+\end{document}
