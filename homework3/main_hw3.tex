@@ -27,9 +27,9 @@ colorlinks=true,
   
 \maketitle
 
-\section{Stata or Python}
+\section{Part 1: Math}
 
-\subsection{Logarithmic transformation}
+\subsection{A}
 The following steps prove the equality by the properties of logarithms:
 \begin{align}
     ln{(y_i)} = \alpha + ln{(\delta_i)} d_i + \gamma ln{(z_i)} + \eta_i
@@ -55,11 +55,75 @@ The following steps prove the equality by the properties of logarithms:
     = \alpha + ln{(\delta)}d_i + \gamma ln{(z_i)} + \eta_i
 \end{align}
 
-\subsection{Parameter of interest}
+\subsection{B}
 
-The parameter $\delta$ is easiest to interpret when all the terms of $y_i$ have been log-transformed. In equation (6) above, $\delta$ represents the efficacy of the retrofit program. More precisely, $\delta$ is the percent-change in $y_i$ for a $1\%$ change in 
+The parameter $\delta$ is \textbf{average treatment effect} of the retrofit program.
 
+\subsection{C}
 
+We want to show proof of the following equality:
+
+\begin{align}
+    \frac{\Delta y_i}{\Delta {d_i}}  = \frac{\delta - 1}{\delta ^ {d_i}} y_i
+\end{align}
+
+Since coefficient $\delta$ is only "activated" by the binary variable $d_i$ taking a value of 1, we can think of the following expression with potential outcomes notation,
+
+\begin{align}
+    y_i (\delta - 1) = \delta y_i - y_i = y_{1i} - y_{0i} = \Delta y_i
+\end{align}
+
+If the above (8) is the numerator of equation (7), we can use the same notation to rework the denominator too:
+
+\begin{align}
+    \delta^{d_i} = d_1i - d_0i = \Delta d_i
+\end{align}
+
+Combining (8) and (9) gives us the original equality,
+
+\begin{align}
+    \frac{\Delta y_i}{\Delta {d_i}}  = \frac{\delta - 1}{\delta ^ {d_i}} y_i
+\end{align}
+
+This term is the \textbf{average marginal effect} of $d_i$.
+
+\subsection{D}
+
+We want to show that the following equality holds:
+
+\begin{align}
+    \frac{\partial y_i}{\partial z_i} = \gamma \frac{y_i}{z_i}
+\end{align}
+
+Using properties of exponents and partial derivatives, we manipulate terms.
+
+\begin{align}
+    \frac{\partial y_i}{\partial z_i} \left(e^\alpha \delta^{d_i} z^\gamma_i e^{\eta_i}\right) = \gamma z_i ^ {\gamma - 1} \left(e^\alpha \delta^{d_i}e^{\eta_i}\right)
+\end{align}
+
+\begin{align}
+    = \gamma z_i ^{\gamma - 1} \left(\frac{y_i}{z_i^\gamma} \right)
+\end{align}
+
+\begin{align}
+    = \gamma \left[\frac{y_i (z_i ^{\gamma - 1})}{z_i^\gamma} \right]
+\end{align}
+
+\begin{align}
+    = \gamma \left[y_i \left(z_i ^ {\gamma - 1 - \gamma} \right) \right]
+\end{align}
+
+\begin{align}
+    = \gamma y_i z_i ^{-1} \hspace{2cm}= \gamma \frac{y_i}{z_i}
+\end{align}
+
+This term is the \textbf{average marginal effect} of $z_i$.
+
+\section{Part 2: Code}
+
+\subsection{Estimation and bootstrapping}
+
+\subsection{Graph}
 
 
 \end{document}
