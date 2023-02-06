@@ -8,7 +8,7 @@ local outputpath = "C:\Users\rellis\Dropbox (GaTech)\PHD_AND_COURSES\SPRING 2023
 	
 	cd "`outputpath'"
 
-
+set scheme plottigblind
 	
 g ln_elec = ln(electricity)
 g ln_sqft = ln(sqft)
@@ -90,97 +90,5 @@ estimates store marg_fx
 
 etable, estimates(bootreg marg_fx) cstat(_r_b) cstat(_r_ci) center column(index) varlabel title("Regression results and Marginal Effects") export(hw3table.tex) replace
 
-
-/*program define bootstrapsample, eclass
-		forvalues i = 1/1000 {
-			preserve // preserves the data as it was in the memory at this point
-				bsample // samples with replacement up to the number of observations
-				
-				reg ln_elec retrofit ln_sqft ln_temp
-
-				mat betas[`i',1] = _b[retrofit]
-				mat betas[`i',2] = _b[ln_sqft]
-				mat betas[`i',3] = _b[ln_temp]
-				mat betas[`i',4] = _b[_cons]
-			restore // restores the data as you preserved it originally
-				
-				
-				
-		}
-
-svmat double betas, names(bootbeta)
-
-rename bootbeta1 retro_bst
-rename bootbeta2 ln_sqft_bst
-rename bootbeta3 ln_temp_bst
-rename bootbeta4 ln_cons_bst
-
-corr retro_bst ln_sqft_bst ln_temp_bst ln_cons_bst, cov // get the covariance matrix
-	
-mat A = r(C) // save covariance matrix
-drop retro_bst ln_cons_bst ln_temp_bst ln_cons_bst
-				
-reg ln_elec retrofit ln_sqft ln_temp // rerun the regression
-ereturn repost V = A
-
-end
-
-bootstrapsample
-estimates store bootreg
-ereturn display
-
-reg ln_elec retrofit ln_sqft ln_temp
-reg ln_elec retrofit ln_sqft ln_temp, vce(bootstrap, reps(1000))
-
-
-/*bootstrapping with guidance from ChatGPT:
-
-// Create new variables to store bootstrapped estimates
-gen boot_intercept = .
-gen boot_retrofit = .
-gen boot_sqft = .
-gen boot_temp = .
-gen boot_ame_retrofit = .
-gen boot_ame_sqft = .
-gen boot_ame_temp = .
-
-// Number of bootstrap replications
-local B = 1000
-
-// Bootstrapping loop
-forvalues i = 1/`B' {
-    
-    // Resample the data with replacement
-    bootstrap ln_elec retrofit sqft temp, seed(`i')
-    
-    // Estimate the regression coefficients
-    reg ln_elec retrofit sqft temp, robust
-    
-    // Store the estimates for the intercept and independent variables
-    replace boot_intercept = _b[_cons] if _n == `i'
-    replace boot_retrofit = _b[retrofit] if _n == `i'
-    replace boot_sqft = _b[sqft] if _n == `i'
-    replace boot_temp = _b[temp] if _n == `i'
-    
-    // Calculate the average marginal effects
-    // scalar ame_retrofit = exp(r(mean) + boot_retrofit*r(mean_retrofit)) - exp(r(mean))
-    // scalar ame_sqft = exp(r(mean) + boot_sqft*r(mean_sqft)) - exp(r(mean))
-    // scalar ame_temp = exp(r(mean) + boot_temp*r(mean_temp))- exp(r(mean))
-
-    
-    // Store the estimates for the average marginal effects
-    replace boot_ame_retrofit = `ame_retrofit' if _n == `i'
-    replace boot_ame_sqft = `ame_sqft' if _n == `i'
-    replace boot_ame_temp = `ame_temp' if _n == `i'
-}
-
-// Calculate the lower and upper bounds of the 95% confidence intervals
-sort boot_intercept
-local lower_intercept = boot_intercept[`floor(0.025*`B')']
-local upper_intercept = boot_intercept[`floor(0.975*`B')']
-sort boot_retrofit
-local lower_retrofit = boot_retrofit[`floor(0.025*`B')']
-local upper_retrofit = boot_retrofit[`floor(0.975*`B')']
-sort boot_sqft
-local lower_sqft = boot_sqft[`floor(0.025*`B')']
-local upper_sqft = boot_sqft[`floor(0.975*`B')']
+coefplot marg_fx, drop(mfx_retro) ci(95) vertical title("Average Marginal Effects")
+graph export ame_hw3.png, replace
