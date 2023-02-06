@@ -1,0 +1,18 @@
+	(1)
+VARIABLES	ln_elec
+	
+ln_elec	
+	( - )
+retrofit	-0.101***
+	(-0.113 - -0.0880)
+ln_sqft	0.894***
+	(0.880 - 0.908)
+ln_temp	0.281**
+	(0.0404 - 0.522)
+Constant	-0.769
+	(-1.838 - 0.300)
+	
+Observations	1,000
+R-squared	0.937
+ci in parentheses	
+*** p<0.01, ** p<0.05, * p<0.1	

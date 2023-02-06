@@ -2,9 +2,9 @@ clear all
 set more off
 
 
-import delimited "C:\Users\rellis63\Dropbox (GaTech)\PHD_AND_COURSES\SPRING 2023\ENVIRO 2\phdee-2023-db\homework2\kwh.csv"
+import delimited "C:\Users\rellis\Dropbox (GaTech)\PHD_AND_COURSES\SPRING 2023\ENVIRO 2\phdee-2023-db\homework2\kwh.csv"
 
-local outputpath = "C:\Users\rellis63\Dropbox (GaTech)\PHD_AND_COURSES\SPRING 2023\ENVIRO 2\phdee-2023-RE\homework3\output" 
+local outputpath = "C:\Users\rellis\Dropbox (GaTech)\PHD_AND_COURSES\SPRING 2023\ENVIRO 2\phdee-2023-RE\homework3\output" 
 	
 	cd "`outputpath'"
 
@@ -27,12 +27,6 @@ lab var ln_temp "ln(Temperature (F))"
 lab var retro_mfx "Marginal Effects, retrofit"
 lab var sqft_mfx "Marginal Effects, sqft"
 lab var temp_mfx "Marginal Effects, temp"
-
-
-*initial regression and marginal effects
-
-reg ln_elec retrofit ln_sqft ln_temp
-estimates store og_betas
 
 
 *Bootstrapping using guidance from hw1 sample code:
@@ -82,10 +76,19 @@ program define bootstrapsample, eclass
 end
 
 bootstrapsample // run program
+estimates store bootreg
 
+rename mfx1 mfx_retro
+lab var mfx_retro "Marginal Effects, Retrofit"
+rename mfx2 mfx_sqft
+lab var mfx_sqft "Marginal Effects, Square Feet"
+rename mfx3 mfx_temp
+lab var mfx_temp "Marginal Effects, Temperature (F)"
 
+mean mfx_retro mfx_sqft mfx_temp
+estimates store marg_fx
 
-
+etable, estimates(bootreg marg_fx) cstat(_r_b) cstat(_r_ci) center column(index) varlabel title("Regression results and Marginal Effects") export(hw3table.tex) replace
 
 
 /*program define bootstrapsample, eclass
