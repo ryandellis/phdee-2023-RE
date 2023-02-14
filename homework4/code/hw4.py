@@ -85,11 +85,11 @@ y = bycatch3a['bycatch']
 X = sm.add_constant(X)
 
 # fit the regression model
-model = sm.OLS(y, X).fit(cov_type='HC1')
+model3a = sm.OLS(y, X).fit(cov_type='HC1')
 
 
 # print the regression results
-print(model.summary())
+print(model3a.summary())
 
 # full sample, 3b
 
@@ -102,10 +102,10 @@ y = bycatch['bycatch']
 X = sm.add_constant(X)
 
 # fit the regression model
-model = sm.OLS(y, X).fit(cov_type='HC1')
+model3b = sm.OLS(y, X).fit(cov_type='HC1')
 
 # print the regression results
-print(model.summary())
+print(model3b.summary())
 
 
 # now with all covariates, 3c
@@ -115,10 +115,10 @@ y = bycatch['bycatch']
 X = sm.add_constant(X)
 
 # fit the regression model
-model = sm.OLS(y, X).fit(cov_type='HC1')
+model3c = sm.OLS(y, X).fit(cov_type='HC1')
 
 # print the regression results
-print(model.summary())
+print(model3c.summary())
 
 
 
