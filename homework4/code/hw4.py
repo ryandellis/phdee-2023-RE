@@ -16,6 +16,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import random
 import statsmodels.api as sm
+from stargazer.stargazer import Stargazer as stargazer
+from stargazer.stargazer import LineLocation
+
 
 
 # Set working directories and seed
@@ -46,7 +49,7 @@ control_grouped = control.groupby('month').mean()
 # plotting treatment and control by monthly means
 plt.plot(treat_grouped.index, treat_grouped['bycatch'], label='Treated')
 plt.plot(control_grouped.index, control_grouped['bycatch'], label='Control')
-
+plt.axvline(x=12.5, color = 'red', linestyle = 'dashed')
 plt.legend()
 plt.xlabel('Month')
 plt.ylabel('Mean Bycatch (kg)')
@@ -69,23 +72,32 @@ print(dd_estimate_1)
 
 # indicator variables, 3a
 
+## Treatment group and treated variables
+bycatch['treatgroup'] = bycatch['treated'] 
+bycatch['treated2'] = np.where((bycatch['treated'] == 1) & (bycatch['month']>12) & (bycatch['month']<25), 1, 0)
+bycatch['treated3'] = np.where((bycatch['month']>24), 1, 0)
+bycatch['treated'] = bycatch['treated2'] + bycatch['treated3']
+bycatch = bycatch.drop(columns = ['treated2', 'treated3'])
+
+
+## Setup DID
 bycatch = bycatch.reset_index(drop=True)
 bycatch3a = bycatch[(bycatch['month'] == 12) | (bycatch['month'] == 13)]
-bycatch3a = bycatch3a.reset_index(drop=True)
-bycatch3a['pre'] = (bycatch3a['month']==12).astype(int)
-bycatch3a['post'] = (bycatch3a['month']==13).astype(int)
+pre = pd.get_dummies(bycatch3a['month'],prefix = 'pre', drop_first = True)
+bycatch3a = pd.concat([bycatch3a,pre],axis=1)
 
-
+yvar3a = bycatch3a['bycatch']
+xvar3a = bycatch3a[['treatgroup','treated','pre_13']]
 
 # create a new variable for the interaction of treatment and period
-bycatch3a['treat_post'] = bycatch3a['treated'] * bycatch3a['post']
+# bycatch3a['treat_post'] = bycatch3a['treated'] * bycatch3a['post']
 
-X = bycatch3a[['pre','treated','treat_post']]
-y = bycatch3a['bycatch']
-X = sm.add_constant(X)
+#X = bycatch3a[['pre','treated','treat_post']]
+#y = bycatch3a['bycatch']
+#X = sm.add_constant(X)
 
 # fit the regression model
-model3a = sm.OLS(y, X).fit(cov_type='HC1')
+model3a = sm.OLS(yvar3a,sm.add_constant(xvar3a, prepend = False)).fit(cov_type='HC1')
 
 
 # print the regression results
@@ -93,16 +105,12 @@ print(model3a.summary())
 
 # full sample, 3b
 
-bycatch['pre'] = (bycatch['month'] < 13).astype(int)
-bycatch['post'] = (bycatch['month'] >= 13).astype(int)
-bycatch['treat_post'] = bycatch['treated'] * bycatch['post']
-
-X = bycatch[['pre','treated','treat_post']]
-y = bycatch['bycatch']
-X = sm.add_constant(X)
+yvar3b = bycatch['bycatch']
+tvars3b = pd.get_dummies(bycatch['month'],prefix = 'time',drop_first = True)
+xvar3b = pd.concat([bycatch[['treatgroup','treated']],tvars3b],axis = 1)
 
 # fit the regression model
-model3b = sm.OLS(y, X).fit(cov_type='HC1')
+model3b = sm.OLS(yvar3b, sm.add_constant(xvar3b, prepend = False)).fit(cov_type='HC1')
 
 # print the regression results
 print(model3b.summary())
@@ -110,16 +118,28 @@ print(model3b.summary())
 
 # now with all covariates, 3c
 
-X = bycatch[['pre','treated','treat_post','firmsize','shrimp','salmon']]
-y = bycatch['bycatch']
-X = sm.add_constant(X)
+yvar3c = bycatch['bycatch']
+tvars3c = pd.get_dummies(bycatch['month'],prefix = 'time',drop_first = True)
+xvar3c = pd.concat([bycatch[['treatgroup','treated','shrimp','salmon','firmsize']],tvars3c],axis = 1)
 
 # fit the regression model
-model3c = sm.OLS(y, X).fit(cov_type='HC1')
+model3c = sm.OLS(yvar3c, sm.add_constant(xvar3c, prepend=False)).fit(cov_type='HC1')
 
 # print the regression results
 print(model3c.summary())
 
+
+# Stargazer
+os.chdir(outputpath)
+star = stargazer([model3a,model3b,model3c])
+
+star.rename_covariates({'treatgroup':'Treatment Group', 'treated':'Treated', 'pre_13':'Pre-treatment', 'shrimp':'Shrimp', 'salmon':'Salmon', 'firmsize':'Firm Size'})
+star.significant_digits(2)
+star.show_degrees_of_freedom(False)
+
+latex_star = star.render_latex()
+with open('my_table.tex', 'w') as f:
+    f.write(latex_star)
 
 
 
