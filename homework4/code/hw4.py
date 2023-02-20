@@ -14,7 +14,6 @@ import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import random
 import statsmodels.api as sm
 from stargazer.stargazer import Stargazer as stargazer
 from stargazer.stargazer import LineLocation
@@ -47,14 +46,17 @@ treat_grouped = treat.groupby('month').mean()
 control_grouped = control.groupby('month').mean()
 
 # plotting treatment and control by monthly means
+os.chdir(outputpath)
+
 plt.plot(treat_grouped.index, treat_grouped['bycatch'], label='Treated')
 plt.plot(control_grouped.index, control_grouped['bycatch'], label='Control')
 plt.axvline(x=12.5, color = 'red', linestyle = 'dashed')
 plt.legend()
 plt.xlabel('Month')
 plt.ylabel('Mean Bycatch (kg)')
-
+plt.savefig('image1.png')
 plt.show()
+
 
 
 # difference-in-differences (2-month period around treatment), q2
@@ -128,6 +130,9 @@ model3c = sm.OLS(yvar3c, sm.add_constant(xvar3c, prepend=False)).fit(cov_type='H
 # print the regression results
 print(model3c.summary())
 
+# new csv for dataframe
+os.chdir(datapath)
+bycatch.to_csv('bycatch_stata.csv', index=None, header=True)
 
 # Stargazer
 os.chdir(outputpath)
@@ -136,6 +141,7 @@ star = stargazer([model3a,model3b,model3c])
 star.rename_covariates({'treatgroup':'Treatment Group', 'treated':'Treated', 'pre_13':'Pre-treatment', 'shrimp':'Shrimp', 'salmon':'Salmon', 'firmsize':'Firm Size'})
 star.significant_digits(2)
 star.show_degrees_of_freedom(False)
+star.add_line('Month indicators',['Y','Y','Y'], LineLocation.FOOTER_TOP)
 
 latex_star = star.render_latex()
 with open('my_table.tex', 'w') as f:
