@@ -102,23 +102,7 @@ print(secondstage_c.summary())
 
 ##############################################################################
 
-### Row and column names
-rownames = pd.concat([pd.Series(['car', 'mpg_hat', 'Constant', 'First-stage F']),pd.Series([' ',' ',' ',])],axis = 1).stack()
-colnames = pd.Series(['Coefficients','a','b','c'])
 
-# Get coefficients and standard errors
-coef_a = secondstage_a.params.to_numpy()
-stderr_a = secondstage_a.bse.to_numpy()
-coef_b = secondstage_b.params.to_numpy()
-stderr_b = secondstage_b.bse.to_numpy()
-coef_c = secondstage_c.params.to_numpy()
-stderr_c = secondstage_c.bse.to_numpy()
 
-# Get first-stage F statistics
-fstat_a = round(f_stat_a.fvalue[0][0], 2)
-fstat_b = round(f_stat_b.fvalue[0][0], 2)
-fstat_c = round(f_stat_c.fvalue[0][0], 2)
 
-outputtable = pd.DataFrame((np.append(coef_a, stderr_a, fstat_a),np.append(coef_b, stderr_b, fstat_b),np.append(coef_c, stderr_c, fstat_c))).T
-outputtable.index = rownames
-outputtable.columns = colnames
+
