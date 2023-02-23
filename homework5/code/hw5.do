@@ -20,7 +20,7 @@ drop _all
 
 import delimited "C:\Users\rellis\Dropbox (GaTech)\PHD_AND_COURSES\SPRING 2023\ENVIRO 2\phdee-2023-RE\homework5\instrumentalvehicles.csv"
 
-local outputpath "C:\Users\rellis\Dropbox (GaTech)\PHD_AND_COURSES\SPRING 2023\ENVIRO 2\phdee-2023-RE\homework4\output"
+local outputpath "C:\Users\rellis\Dropbox (GaTech)\PHD_AND_COURSES\SPRING 2023\ENVIRO 2\phdee-2023-RE\homework5\output"
 cd "`outputpath'"
 /*==================================================
               1: ivregress liml
