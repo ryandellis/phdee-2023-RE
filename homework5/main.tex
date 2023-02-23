@@ -27,7 +27,31 @@ colorlinks=true,
   
 \maketitle
 
-\input{homework5/output/table.tex}
+\section{Python}
+\subsection{}
+\begin{itemize}
+    \item The coefficient on the endogenous $mpg$ is -22.21. A unit increase in $mpg$ corresponds to a decrease in price of \$22.21.
+\end{itemize}
+
+\subsection{}
+\begin{itemize}
+    \item We should be concerned primarily with omitted variable bias, or equivalently, the possibility that $mpg$ is a confounder correlated with both $price$ and the error term. It's unlikely that we have measurement error or simultaneity in this particular application.
+\end{itemize}
+
+\subsection{}
+\input{homework5/output/my_table.tex}
+
+\clearpage
+
+\subsection{}
+\begin{itemize}
+    \item Using GMM, the second-stage coefficient of interest ($mpg$) is 150.43, with S.E. 63.05. The point estimate is identical to treatment (1) in the table above, but with slightly larger errors, likely due to a suboptimal weighting matrix in the GMM estimation. GMM is more efficient than 2SLS when there are multiple instruments. In this case, there is only one.
+\end{itemize}
+
+
+\section{Stata}
+
+\subsection{}
 
 
 \end{document}
