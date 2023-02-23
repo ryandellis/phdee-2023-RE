@@ -16,7 +16,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import random
 import statsmodels.api as sm
-from stargazer.stargazer import Stargazer
+from stargazer.stargazer import Stargazer as stargazer
+from stargazer.stargazer import LineLocation
+from linearmodels.iv import IVGMM
+
 
 
 # Set working directories
@@ -102,7 +105,33 @@ print(secondstage_c.summary())
 
 ##############################################################################
 
+# Parts d and e)
+print("Discuss exclusion restrictions")
+print("Compare estimated coefficients of mpg")
+
+star = stargazer([secondstage_a, secondstage_b, secondstage_c])
+star.show_degrees_of_freedom(False)
+star.significant_digits(2)
+star.add_line('First-stage F',[f_stat_a.fvalue, f_stat_b.fvalue, f_stat_c.fvalue], LineLocation.FOOTER_TOP)
 
 
+os.chdir(outputpath)
+latex1 = star.render_latex()
+with open('my_table.tex', 'w') as f:
+    f.write(latex1)
+
+
+##############################################################################
+
+depend = ivehicles['price']
+endog = ivehicles['mpg']
+exog = ivehicles['car']
+exog = sm.add_constant(exog)
+inst = ivehicles['weight']
+
+gmm = IVGMM(depend, exog, endog, inst)
+results = gmm.fit()
+
+print(results)
 
 
