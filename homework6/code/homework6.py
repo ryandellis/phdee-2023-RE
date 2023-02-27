@@ -11,17 +11,11 @@ get_ipython().magic('reset -sf')
 
 # Import packages
 import os
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import random
-import statsmodels.api as sm
-from stargazer.stargazer import Stargazer as stargazer
-from stargazer.stargazer import LineLocation
-import seaborn as sns
+from rdrobust import rdplot
 
-
-
+#%%
 # Set working directories
 datapath = r'C:\Users\rellis\Dropbox (GaTech)\PHD_AND_COURSES\SPRING 2023\ENVIRO 2\phdee-2023-RE\homework6'
 outputpath = r'C:\Users\rellis\Dropbox (GaTech)\PHD_AND_COURSES\SPRING 2023\ENVIRO 2\phdee-2023-RE\homework6\output'
@@ -31,6 +25,7 @@ os.chdir(datapath)
 ivehicles = pd.read_csv('instrumentalvehicles.csv')
 os.chdir(outputpath)
 
+#%%
 # define the cutoff and create scatterplot
 cutoff = 225
 plt.scatter(ivehicles['length'] - cutoff, ivehicles['mpg'], s=20, c='navy', alpha=.5, marker='o')
@@ -43,3 +38,7 @@ plt.show()
 
 
 #%%
+# first order polynomial RD
+
+plot1=rdplot(y=ivehicles[['mpg']],x=ivehicles[['length']], c=cutoff, p=1,ci=95, title="RD: 1st-order polynomial")
+
