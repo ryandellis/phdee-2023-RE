@@ -13,7 +13,7 @@ get_ipython().magic('reset -sf')
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
-from rdrobust import rdplot
+from rdrobust import rdplot, rdrobust, rdbwselect
 
 #%%
 # Set working directories
@@ -41,10 +41,12 @@ plt.show()
 # first order polynomial RD
 
 plot1=rdplot(y=ivehicles[['mpg']],x=ivehicles[['length']], c=cutoff, p=1,ci=95, title="RD: 1st-order polynomial")
+y = ivehicles[['mpg']]
+x = ivehicles[['length']]
+rdrobust(y, x, 225)
 
 #%%
 plot2=rdplot(y=ivehicles[['mpg']],x=ivehicles[['length']], c=cutoff, p=2,ci=95, title="RD: 2nd-order polynomial")
-
 
 #%%
 plot3=rdplot(y=ivehicles[['mpg']],x=ivehicles[['length']], c=cutoff, p=5,ci=95, title="RD: 5th-order polynomial")
