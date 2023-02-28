@@ -37,6 +37,9 @@ colorlinks=true,
 \end{figure}
 
 \subsection{}
+\begin{itemize}
+    \item The point estimate for the coefficient of interest is -9591.35. It implies that the treatment reduces bycatch by that amount, in pounds. 
+\end{itemize}
 
 \clearpage
 \subsection{}
@@ -45,6 +48,10 @@ colorlinks=true,
 \input{homework4/output/my_table}
 \end{table}
 
+
+\begin{itemize}
+    \item With the full sample and additional controls, the estimated treatment effect is both smaller and more precise.
+\end{itemize}
 \clearpage
 \section{Stata}
 
@@ -54,5 +61,9 @@ colorlinks=true,
 \input{homework4/output/stata_table_hw4.tex}
 
 \end{table}
+
+\begin{itemize}
+    \item These two specifications report identical point estimates, but different standard errors. Also of note, the within-transformation in Stata drops the variable $firmisize$ due to collinearity. Compared to the Python results above, we have still smaller point estimates for treatment effect, though we have lost some efficiency compared to the full-sample DiD (spec. 3). This is because the mathematical demeaning of each variable can "absorb" variation in the data, leading to less precise estimates.
+\end{itemize}
 
 \end{document}
