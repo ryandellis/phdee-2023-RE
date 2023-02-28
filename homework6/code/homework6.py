@@ -14,6 +14,8 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 from rdrobust import rdplot, rdrobust, rdbwselect
+from rdd import rdd
+import statsmodels.api as sm
 
 #%%
 # Set working directories
@@ -47,6 +49,21 @@ rdrobust(y, x, 225)
 
 #%%
 plot2=rdplot(y=ivehicles[['mpg']],x=ivehicles[['length']], c=cutoff, p=2,ci=95, title="RD: 2nd-order polynomial")
-
+rdrobust(y, x, 225, p=2)
 #%%
 plot3=rdplot(y=ivehicles[['mpg']],x=ivehicles[['length']], c=cutoff, p=5,ci=95, title="RD: 5th-order polynomial")
+rdrobust(y,x,225,p=5)
+
+#%%
+# let's try rdd package
+first_stage = rdd.rdd(ivehicles, 'length', 'mpg', cut=225).fit()
+print(first_stage.summary())
+mpg_hat = pd.Series(first_stage.fittedvalues, name='mpg_hat')
+
+X_hat = pd.concat([mpg_hat, ivehicles['car']], axis=1)
+X_hat = sm.add_constant(X_hat)
+secondstage = sm.OLS(ivehicles[['price']], X_hat).fit()
+print(secondstage.summary())
+
+
+
