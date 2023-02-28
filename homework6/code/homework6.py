@@ -42,3 +42,9 @@ plt.show()
 
 plot1=rdplot(y=ivehicles[['mpg']],x=ivehicles[['length']], c=cutoff, p=1,ci=95, title="RD: 1st-order polynomial")
 
+#%%
+plot2=rdplot(y=ivehicles[['mpg']],x=ivehicles[['length']], c=cutoff, p=2,ci=95, title="RD: 2nd-order polynomial")
+
+
+#%%
+plot3=rdplot(y=ivehicles[['mpg']],x=ivehicles[['length']], c=cutoff, p=5,ci=95, title="RD: 5th-order polynomial")
