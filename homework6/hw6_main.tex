@@ -72,8 +72,10 @@ colorlinks=true,
 
 \subsection{}
 \begin{itemize}
-    \item In the 2SLS specification, the average treatment effect is 135.92 (similar in magnitude to estimates from the previous homework).
+    \item In the 2SLS specification, the average treatment effect is 135.92 (similar in magnitude to estimates from the previous homework) I used a 2nd order polynomial to provide some functional flexibility while resisting the overfittedness common in higher order specifications.
 \end{itemize}
+
+\clearpage
 
 \section{Stata}
 \subsection{}
@@ -81,12 +83,16 @@ colorlinks=true,
     \item The average treatment effect from the second stage results is 135.41.
 \end{itemize}
 
-\begin{figure}
+\begin{figure}[htbp]
     \centering
-    \includegraphics{}
-    \caption{Caption}
-    \label{fig:my_label}
+    \includegraphics[scale=.5]{homework6/output/rd_stata.png}
+    \caption{Results from rdrobust with 2nd order polynomial.}
+    \label{fig:figure5}
 \end{figure}
 
+\subsection{}
+\begin{itemize}
+    \item My intuition says this is not a valid instrument, since the first stage was a nonlinear estimation. 
+\end{itemize}
 \end{document}
 
