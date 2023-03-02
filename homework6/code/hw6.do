@@ -34,7 +34,7 @@ rdplot mpg length, c(225) p(2) bwselect(mserd) genvars
 
 
 rename rdplot_hat_y mpg_hat
-cd `outputpath'
+cd "$outputpath"
 gr export rd_stata.png
 *----------1.2:
 
